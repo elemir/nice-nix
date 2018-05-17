@@ -1,4 +1,4 @@
-{ stable, version, commit, sha256Hash, archPatchesRevision, archPatchesHash }:
+{ stable, version, sha256Hash, archPatchesRevision, archPatchesHash }:
 
 { mkDerivation, lib, fetchgit, fetchsvn
 , pkgconfig, pythonPackages, cmake, wrapGAppsHook
@@ -15,7 +15,7 @@ mkDerivation rec {
   # Telegram-Desktop with submodules
   src = fetchgit {
     url = "git://github.com/telegramdesktop/tdesktop";
-    rev = commit;
+    rev = "v${version}";
     sha256 = sha256Hash;
     fetchSubmodules = true;
   };
@@ -52,9 +52,11 @@ mkDerivation rec {
   GYP_DEFINES = concatStringsSep "," [
     "TDESKTOP_DISABLE_CRASH_REPORTS"
     "TDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
+    "TDESKTOP_DISABLE_AUTOUPDATE"
   ];
 
   NIX_CFLAGS_COMPILE = [
+    "-DTDESKTOP_DISABLE_AUTOUPDATE"
     "-DTDESKTOP_DISABLE_CRASH_REPORTS"
     "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
     "-I${minizip}/include/minizip"
